@@ -73,7 +73,6 @@ def read_configuration(config_file='~/.config/pythymer.conf'):
     """ Reads the predefined configurations. """
 
     config_file = config_file.replace('~', os.path.expanduser('~'))
-    print('CONFIG FILE: {}'.format(config_file))
 
     opts = {'thyme': '~/workspace/bin/thyme',
             'data': '~/thyme_logs/',
@@ -106,6 +105,9 @@ def read_configuration(config_file='~/.config/pythymer.conf'):
         print('Warning: Can not find {}'.format(config_file))
         print('Using default parameter values.')
 
+    opts['thyme'] = opts['thyme'].replace('~', os.path.expanduser('~'))
+    opts['data'] = opts['data'].replace('~', os.path.expanduser('~'))
+
     return opts
 
 
@@ -134,7 +136,6 @@ def start_thymer():
 
     check_if_thyme_running()
     opts = read_configuration()
-    print(opts)
 
     while True:
         filename = opts['data'] + generate_filename()
