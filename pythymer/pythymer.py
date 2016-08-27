@@ -9,6 +9,7 @@ import socket
 import subprocess
 import os
 import configparser
+import argparse
 
 
 def is_weekend():
@@ -64,6 +65,8 @@ def setup():
     config = configparser.ConfigParser()
     config['SETUP'] = opts
     # TODO: Write config to ~/.config/pythymer.conf
+
+    sys.exit('Thymer setup complete')
 
 
 def read_configuration(config_file='~/.config/pythymer.conf'):
@@ -123,6 +126,13 @@ def check_if_thyme_running():
 
 
 def start_thymer():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--setup', help='Run the interactive setup', action='store_true')
+    args = parser.parse_args()
+
+    if args.setup:
+        setup()
+
     check_if_thyme_running()
     opts = read_configuration()
     print(opts)
