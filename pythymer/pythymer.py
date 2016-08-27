@@ -40,12 +40,12 @@ def setup():
     """ Interactive setup routine for generating the conf-file. """
     opts = {}
     input('Generating configuration file for thymer. Leave selection blank to use the default settings.\n(Press ENTER to continue)')
-    opts['THYME'] = input('Input path to the thyme executable. If thyme is defined in your path you can simply use "thyme" (default="~/workspace/bin/thyme")\n>')
-    opts['DATA'] = input('Input path where you want to store thyme-logs (default="~/thyme_logs")\n>')
-    opts['START'] = input('Input the time you want to start logging each day as HH:MM (default=always log)\n>')
-    opts['END'] = input('Input the time you want to stop logging each day as HH:MM (default=always log)\n>')
-    opts['INTERVAL'] = float(input('Input polling interval in seconds (default=30)\n>'))
-    opts['SKIP_WEEKENDS'] = input('Input whether to log data on weekends (default=False)\n').lower() == 'true'
+    opts['THYME'] = input('\nInput path to the thyme executable. If thyme is defined in your path you can simply use "thyme" (default="~/workspace/bin/thyme")\n>')
+    opts['DATA'] = input('\nInput path where you want to store thyme-logs (default="~/thyme_logs")\n>')
+    opts['START'] = input('\nInput the time you want to start logging each day as HH:MM (default=always log)\n>')
+    opts['END'] = input('\nInput the time you want to stop logging each day as HH:MM (default=always log)\n>')
+    opts['INTERVAL'] = float(input('\nInput polling interval in seconds (default=30)\n>'))
+    opts['SKIP_WEEKENDS'] = input('\nInput whether to skip data loggin on weekends (default=False)\n>').lower() == 'true'
 
 
     if not opts['THYME']:
@@ -60,11 +60,11 @@ def setup():
         opts['INTERVAL'] = 30.0
     print('Writing configuration to ~/.config/pythymer.conf. If you want to change options in the future you can edit this file.')
 
-    print(opts)
-
     config = configparser.ConfigParser()
     config['SETUP'] = opts
-    # TODO: Write config to ~/.config/pythymer.conf
+    filename = os.path.expanduser('~') + '/.config/pythymer.conf'
+    with open(filename, 'w+') as configfile:  # Check if we need to expand ~
+        config.write(configfile)
 
     sys.exit('Thymer setup complete')
 
@@ -75,7 +75,6 @@ def read_configuration(config_file='~/.config/pythymer.conf'):
     config_file = config_file.replace('~', os.path.expanduser('~'))
     print('CONFIG FILE: {}'.format(config_file))
 
-    opts = {}
     opts = {'thyme': '~/workspace/bin/thyme',
             'data': '~/thyme_logs/',
             'start': None,
@@ -105,7 +104,7 @@ def read_configuration(config_file='~/.config/pythymer.conf'):
             opts['skip_weekends'] = config['skip_weekends'].lower() == 'true'
     else:
         print('Warning: Can not find {}'.format(config_file))
-        print('Reverting to default parameter values.')
+        print('Using default parameter values.')
 
     return opts
 
@@ -145,5 +144,4 @@ def start_thymer():
 
 
 if __name__ == '__main__':
-    # start_thymer()
-    setup()
+    start_thymer()
