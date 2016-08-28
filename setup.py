@@ -10,4 +10,4 @@ setup(name='pythymer',
       package_dir={'pythymer': 'pythymer'},
       include_package_data=False,
       entry_points={"console_scripts":
-                    ["thymer = pythymer.pythymer:start_pythymer"]})
+                    ["thymer = pythymer.pythymer:start_thymer"]})
