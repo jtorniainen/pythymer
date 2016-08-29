@@ -124,7 +124,7 @@ def check_if_thyme_running():
     global lock_socket
     lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
     try:
-        lock_socket.bind('/tmp/pythymer.lock')
+        lock_socket.bind('\0' + 'pythymer.lock')
     except socket.error:
         sys.exit('An instance of pythymer is already running.')
 
