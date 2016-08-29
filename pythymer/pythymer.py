@@ -44,7 +44,7 @@ def setup():
     opts['DATA'] = input('\nInput path where you want to store thyme-logs (default="~/thyme_logs")\n>')
     opts['START'] = input('\nInput the time you want to start logging each day as HH:MM (default=always log)\n>')
     opts['END'] = input('\nInput the time you want to stop logging each day as HH:MM (default=always log)\n>')
-    opts['INTERVAL'] = float(input('\nInput polling interval in seconds (default=30)\n>'))
+    opts['INTERVAL'] = input('\nInput polling interval in seconds (default=30)\n>')
     opts['SKIP_WEEKENDS'] = input('\nInput whether to skip data loggin on weekends (default=False)\n>').lower() == 'true'
 
 
@@ -58,6 +58,9 @@ def setup():
         opts.pop('END', None)
     if not opts['INTERVAL']:
         opts['INTERVAL'] = 30.0
+    else:
+        opts['INTERVAL'] = float(opts['INTERVAL'])
+
     print('Writing configuration to ~/.config/pythymer.conf. If you want to change options in the future you can edit this file.')
 
     config = configparser.ConfigParser()
