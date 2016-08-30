@@ -8,6 +8,7 @@ import datetime
 import socket
 import subprocess
 import os
+import platform
 import configparser
 import argparse
 import sys
@@ -122,16 +123,17 @@ def generate_filename():
 
 def check_if_thyme_running():
     """ Checks if there is an existing thyme instance. """
-
-    # TODO: Lock only works for linux for now
-    if sys.platform == 'linux':
-        global lock_socket
-        lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-        try:
+    global lock_socket
+    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        if sys.platform == 'linux':
             lock_socket.bind('\0' + 'pythymer.lock')
-        except socket.error:
-            sys.exit('An instance of pythymer is already running.')
-
+        if sys.platform == 'Darwin':
+            lock_socket.bind('pythymer.lock')
+        else:
+            # TODO: what to do here
+    except socket.error:
+        sys.exit('An instance of pythymer is already running.')
 
 def start_thymer():
     parser = argparse.ArgumentParser()
