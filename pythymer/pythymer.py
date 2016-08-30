@@ -10,6 +10,7 @@ import subprocess
 import os
 import configparser
 import argparse
+import sys
 
 
 def is_weekend():
@@ -121,12 +122,15 @@ def generate_filename():
 
 def check_if_thyme_running():
     """ Checks if there is an existing thyme instance. """
-    global lock_socket
-    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-    try:
-        lock_socket.bind('\0' + 'pythymer.lock')
-    except socket.error:
-        sys.exit('An instance of pythymer is already running.')
+
+    # TODO: Lock only works for linux for now
+    if sys.platform == 'linux':
+        global lock_socket
+        lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        try:
+            lock_socket.bind('\0' + 'pythymer.lock')
+        except socket.error:
+            sys.exit('An instance of pythymer is already running.')
 
 
 def start_thymer():
